@@ -25,5 +25,5 @@ jobs:
       - name: Checkout Pull Request
         uses: actions/checkout@v3
       - name: Echo hey
-        run: echo "$GITHUB_SHA" "${GITHUB_REF}" ${{ github.event.inputs.foo }} ${{ github.event.inputs.bar }}
+        run: echo bonkers "$GITHUB_SHA" "${GITHUB_REF}" ${{ github.event.inputs.foo }} ${{ github.event.inputs.bar }}
 
