@@ -1,36 +1,29 @@
-name: Dispatch
-
 on:
   workflow_dispatch:
     inputs:
-      logLevel:
-        description: 'Log level'
+      foo:
+        description: "Foo"
         required: true
-        default: 'warning'
         type: choice
         options:
-        - info
-        - warning
-        - debug
-      tags:
-        description: 'Test scenario tags'
+          - biz
+          - boop
+          - blur
+      bar:
+        description: "Bar"
         required: false
-        type: boolean
-      environment:
-        description: 'Environment to run tests against'
-        type: environment
-        required: true
+        type: string
 
 
 jobs:
-  log-the-inputs:
-    runs-on: ubuntu-latest
+  start-canary:
+    # This job only runs for pull request comments
+    name: Start Canary
+    runs-on: [ubuntu-latest]
+    timeout-minutes: 15
     steps:
-      - run: |
-          echo "Log level: $LEVEL"
-          echo "Tags: $TAGS"
-          echo "Environment: $ENVIRONMENT"
-        env:
-          LEVEL: ${{ inputs.logLevel }}
-          TAGS: ${{ inputs.tags }}
-          ENVIRONMENT: ${{ inputs.environment }}
+      - name: Checkout Pull Request
+        uses: actions/checkout@v3
+      - name: Echo hey
+        run: echo "$GITHUB_SHA" "${GITHUB_REF}" ${{ github.event.inputs.foo }} ${{ github.event.inputs.bar }}
+
