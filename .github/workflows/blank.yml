@@ -10,6 +10,7 @@ on:
           - boop
           - blur
       bar:
+        if: ${{ github.event.inputs.foo }} == "boop"
         description: "Bar"
         required: false
         type: string
