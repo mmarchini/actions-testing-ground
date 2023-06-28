@@ -16,14 +16,31 @@ on:
 
 
 jobs:
-  start-canary:
+  ci:
     # This job only runs for pull request comments
-    name: Start Canary
     runs-on: [ubuntu-latest]
-    timeout-minutes: 15
     steps:
       - name: Checkout Pull Request
         uses: actions/checkout@v3
       - name: Echo hey
         run: echo "$GITHUB_SHA" "${GITHUB_REF}" ${{ github.event.inputs.foo }} ${{ github.event.inputs.bar }}
 
+  releaser:
+    runs-on: [ubuntu-latest]
+    needs: [ci]
+    outputs:
+      releaseCreated: ${{ steps.release.outputs.release_created }}
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          package-name: actions-testing-ground
+
+  call-other:
+    needs: [releaser]
+    uses: ./.github/workflows/reuse.yml
+    with:
+      foo: "boop"
+      bar: ${{ needs.releaser.outputs.releaseCreated }}
