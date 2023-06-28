@@ -4,14 +4,10 @@ on:
       foo:
         description: "Foo"
         required: true
-        type: choice
-        options:
-          - biz
-          - boop
-          - blur
+        type: string
       bar:
         description: "Bar"
-        required: false
+        required: true
         type: string
 
 env:
